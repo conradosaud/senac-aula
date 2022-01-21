@@ -7,16 +7,22 @@
     <title>Document</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
-
+    
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 
 </head>
 <body>
     <div id="app"></div>
+    
 </body>
 
-<script>
+<script type="module">
+
+    const xmlHttp = new XMLHttpRequest(); 
+    const API_URL = "https://my-json-server.typicode.com/conradosaud/senac-aula/db/";
 
     const vue = new Vue({
         el: '#app',
@@ -35,22 +41,49 @@
                     
                         <form id="formPesquisa" class="w-25 ms-auto">
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Pesquisar ID...">
-                                <button v-on:click="get" class="btn btn-outline-secondary" type="button" id="button-addon2"> <i class="fas fa-search"></i> </button>
+                                <input type="number" class="form-control" id="inputId" placeholder="Pesquisar ID...">
+                                <button v-on:click="buscaId" class="btn btn-outline-secondary" type="button" id="button-addon2"> <i class="fas fa-search"></i> </button>
                             </div>
                         </form>
 
                         <div class="row">
 
-                            <div v-for="produto in db" class="col-4 mb-3">
+                            <div v-if="!estaBuscandoTodos" class="text-end mb-3">
+                                <a href="#" v-on:click.prevent="buscaTodos">Finalizar busca</a>
+                            </div>
+
+                            <div v-for="produto in produtos" class="col-4 mb-3">
                                 <div class="card">
-                                    <img v-bind:src="'imagens/'+produto.foto" class="card-img-top">
+                                    <img v-bind:src="'imagens/'+produto.foto" class="card-img-top" />
                                     <div class="card-body">
                                         <h5 class="card-title"> {{ produto.nome }} <span class="badge bg-info"> <small>R$</small> {{ produto.preco }} </span> </h5>
                                         <p class="card-text"> {{ produto.descricao }} </p>
                                         <div class="d-flex justify-content-between">
-                                            <a href="#" class="btn btn-success"> <i class="fas fa-pen"></i> </a>
-                                            <a href="#" class="btn btn-danger"> <i class="fas fa-trash"></i> </a>
+                                            <a href="#" v-on:click.prevent="iniciaEdicao(produto.id)" data-bs-toggle="modal" data-bs-target="#modal" class="btn btn-success"> <i class="fas fa-pen"></i> </a>
+                                            <a href="#" v-on:click.prevent="remove(produto.id)" class="btn btn-danger"> <i class="fas fa-trash"></i> </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="modal" class="modal" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Editar Produto</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body text-center">
+                                            <img src="" id="modalImg" class="card-img-top w-50 mb-3" />
+                                            <div class="d-flex justify-content-between">
+                                                <input type="text" class="form-control me-1" id="inputNome" placeholder="Nome...">
+                                                <input type="number" class="form-control ms-1" id="inputPreco" placeholder="Preço R$...">
+                                            </div>
+                                            <input type="text" class="form-control mt-2 mb-3" id="inputDescricao" placeholder="Descrição...">
+                                            <div class="d-flex justify-content-between">
+                                                <button v-on:click="edita" type="button" class="btn btn-primary" data-bs-dismiss="modal"> <i class="fas fa-check px-5"></i> </button>
+                                                <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal"> <i class="fas fa-times px-5"></i> </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -64,52 +97,89 @@
         `,
         data: () => {
             return {
-                db: [
-                    {
-                        "id": 1,
-                        "nome": "Prato Feito",
-                        "descricao": "Arroz, feijão, carne e salada",
-                        "foto": "01.jpg",
-                        "preco": 18.5
-                    },
-                    {
-                        "id": 2,
-                        "nome": "Executivo",
-                        "descricao": "Arroz, feijão, maionese, 2 carnes e salada",
-                        "foto": "02.jpg",
-                        "preco": 25.1
-                    },
-                    {
-                        "id": 3,
-                        "nome": "Cachorro quente",
-                        "descricao": "Pão, salsicha, maionese e batata palha",
-                        "foto": "03.jpg",
-                        "preco": 8.5
-                    },
-                    {
-                        "id": 4,
-                        "nome": "Hambúrguer",
-                        "descricao": "Pão, hambúrguer de 90g, presunto, queijo, ovo e salada",
-                        "foto": "04.jpg",
-                        "preco": 13.0
-                    },
-                    {
-                        "id": 5,
-                        "nome": "Vegetariano",
-                        "descricao": "Pão, provolone, cogumelo, ovo e salada",
-                        "foto": "05.jpg",
-                        "preco": 12.5
-                    }
-                ]
+                produtos: [],
+                estaBuscandoTodos: true,
+                idEditando: null
             }
         },
         methods: {
-            get(){
-                var xmlHttp = new XMLHttpRequest();
-                xmlHttp.open( "GET", "https://csaud-teste-api.herokuapp.com/usuarios", false );
+            buscaTodos(){
+                xmlHttp.open( "GET", API_URL, false )
                 xmlHttp.send();
-                console.log(xmlHttp.responseText);
+                const resposta = JSON.parse(xmlHttp.responseText).db;
+                this.produtos = resposta;
+                document.getElementById("inputId").value = "";
+                this.estaBuscandoTodos = true;
+            },
+            buscaId(){
+                const id = document.getElementById("inputId").value;
+                xmlHttp.open( "GET", API_URL+id, false )
+                xmlHttp.send();
+                const resposta = JSON.parse(xmlHttp.responseText);
+                this.estaBuscandoTodos = false;
+                this.produtos = [resposta];
+            },
+            iniciaEdicao(id){
+                const produto = this.produtos.find((produto) => {
+                    if(produto.id == id){
+                        return produto;
+                    }
+                });
+                this.idEditando = produto.id;
+                document.getElementById("modalImg").src = "imagens/"+produto.foto;
+                document.getElementById("inputNome").value = produto.nome;
+                document.getElementById("inputPreco").value = produto.preco;
+                document.getElementById("inputDescricao").value = produto.descricao;                
+            },
+            edita(){
+
+                const id = this.idEditando;
+                const nome = document.getElementById("inputNome").value;
+                const preco = document.getElementById("inputPreco").value;
+                const descricao = document.getElementById("inputDescricao").value;
+
+                const obj = {
+                    nome: nome,
+                    preco: preco,
+                    descricao: descricao,
+                }
+
+                xmlHttp.open( "PUT", API_URL+id, false )
+                xmlHttp.send(obj);
+
+                const resposta = xmlHttp.status;
+                if(resposta == 200){
+                    console.log("SUCESSO! Os dados foram enviados com sucesso para a API.");
+                    //this.buscaTodos();
+                    this.produtos = this.produtos.map((produto) => {
+                        if(produto.id = id){
+                            return {...produto, nome: nome, preco: preco, descricao: descricao}
+                        }else{
+                            return produto;
+                        }
+                    });
+                }
+            },
+            remove(id){
+                if(!confirm('Tem certeza que deseja remover este produto?')){
+                    return
+                }
+                xmlHttp.open( "DELETE", API_URL+id, false )
+                xmlHttp.send();
+                const resposta = xmlHttp.status;
+                if(resposta == 200){
+                    console.log("SUCESSO! O pedido de remoção foi enviado com sucesso para a API.");
+                    //this.buscaTodos();
+                    this.produtos = this.produtos.filter((produto) => {
+                        if(produto.id != id){
+                            return produto;
+                        }
+                    });
+                }
             }
+        },
+        mounted(){
+            this.buscaTodos();
         }
     });
 
