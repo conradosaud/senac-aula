@@ -6,12 +6,6 @@
 
 O projeto é uma aplicação web de um restaurante, onde é possível através de uma API RESTful buscar, alterar e remover dados do catálogo. Toda a interação da interface é feita utilizando o Vue.js
 
-- [x] Tarefa 1
-- [x] Tarefa 2
-- [x] Tarefa 3
-- [ ] Tarefa 4
-- [ ] Tarefa 5
-
 ## 🔨 Tecnologias utilizadas
 
 A estilização do front-end é feita utilizando o Bootstrap e o FontAwesome, juntamente do framework do Vue.js para a reatividade.
