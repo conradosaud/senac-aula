@@ -9,7 +9,8 @@ O projeto é uma aplicação web de um restaurante, onde é possível através d
 ## 💻 Instalação e uso
 
 Crie uma pasta para o projeto e, dentro dela, crie também o arquivo **index.html** que será responsável por toda nossa aplicação.
-**ATENÇÃO:** evite copiar os códigos do arquivo [index.html](https://github.com/conradosaud/senac-aula/blob/main/index.html), ele é apenas um arquivo de consulta em caso de problemas e erros. Escreva seus próprios códigos de acordo com o aprendido e apresentado na aula!
+
+> **ATENÇÃO:** evite copiar os códigos do arquivo [index.html](https://github.com/conradosaud/senac-aula/blob/main/index.html), ele é apenas um arquivo de consulta em caso de problemas e erros. Escreva seus próprios códigos de acordo com o aprendido e apresentado na aula!
 
 Caso queira, você pode utilizar as fotos dos produtos deste projeto, basta baixar a pasta [imagens](https://github.com/conradosaud/senac-aula/blob/main/imagens) deste repositório.
 
